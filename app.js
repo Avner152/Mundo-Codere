@@ -2,16 +2,22 @@
 
 var parent = document.getElementsByClassName('parent')[0];
 var ta = document.createElement('textarea');
+ta.setAttribute('readonly', true);
 var jsonHeader = document.createElement('h1');
 jsonHeader.innerHTML = 'JSON:'
 var json_btn_container = document.createElement('div');
 var beautify = document.createElement('button');
 var minify = document.createElement('button');
+var cpy = document.createElement('button');
+var snack = document.createElement('div');
+snack.setAttribute('id', 'snackbar');
+document.body.appendChild(snack)
+
 
 const headers = ['Online', 'Retail', 'Omni']
 class User{
-  constructor(img_type, img_link, user_type){
-    this.user_type = user_type;
+  constructor(img_type, img_link, user_segment = 'Online'){
+    this.user_segment = user_segment;
     this.img_type = img_type;
     this.img_link = img_link;
   }
@@ -68,26 +74,47 @@ json_btn_container.setAttribute('class','json_btn_container')
 document.body.appendChild(json_btn_container);
 beautify.innerHTML = 'Beautify';
 minify.innerHTML = 'Minify';
+cpy.innerHTML = 'Copy Contect';
+
 json_btn_container.appendChild(beautify);
 json_btn_container.appendChild(minify);
+json_btn_container.appendChild(cpy);
 var x = '';
 
 x = JSON.stringify(userlist);
 
 beautify.addEventListener('click', () =>{
-  x = JSON.stringify(userlist, null, 4)
+  x = JSON.stringify(userlist, null, 3)
   ta.innerHTML = x;
+  snackbar('Beautified!');
+
 })
   
 minify.addEventListener('click', () =>{
-x = JSON.stringify(userlist)
-ta.innerHTML = x;
+  x = JSON.stringify(userlist)
+  ta.innerHTML = x;
+  snackbar('Minified!');
+
+})
+
+cpy.addEventListener('click', () =>{
+  document.querySelector("textarea").select();
+  document.execCommand('copy');
+  snackbar('Copied!');
 })
 
 ta.innerHTML = x;
 
 document.body.appendChild(ta);  
 }
+
+function snackbar(msg) {
+  var snack = document.getElementById("snackbar");
+  snack.innerText = msg;
+  snack.className = "show";
+  setTimeout(function(){ snack.className = snack.className.replace("show", ""); }, 2400);
+}
+
 function createInputs(){
   var main_container = document.getElementsByClassName('container')[0];
   var input_son = document.getElementsByClassName('son')[0];
@@ -113,11 +140,11 @@ function findLengths(){
   lens = [0,0,0];
   
   userlist.users.forEach(user => {
-    if(!user.user_type.localeCompare('Online'))
+    if(!user.user_segment.localeCompare('Online'))
       lens[0]++;
-    else if(!user.user_type.localeCompare('Retail'))
+    else if(!user.user_segment.localeCompare('Retail'))
       lens[1]++;
-    else if(!user.user_type.localeCompare('Omni'))
+    else if(!user.user_segment.localeCompare('Omni'))
       lens[2]++;
     else
       console.log('No match!');
@@ -133,13 +160,12 @@ function addTableDyn(){
 
   lens = findLengths();
 
-    while (count < 3){
+  while (count < 3){
   
   if(lens[count] == 0){
     console.log('empty');
   }
   else{
-
   var div_element = document.createElement('div');  
   div_element.setAttribute('class', 'my_table')
 
@@ -154,10 +180,9 @@ function addTableDyn(){
    var row = document.createElement("tr");
    row.setAttribute("class", "rows")
 
-     for (let k = 0; k < 3; k++) {
+     for (let k = 0; k < 4; k++) {
        var headCell = document.createElement("td");
        var text = document.createElement('h3');
-      //  headCell.style.textAlign = "center";
 
        switch (k){
          case 0:
@@ -169,6 +194,10 @@ function addTableDyn(){
          case 2:
              str = 'Image Link'
              break;
+        case 3:
+          console.log('iter');
+             str = 'Preview'
+             break;
      }
      text.innerHTML = str;
      headCell.appendChild(text);
@@ -179,7 +208,7 @@ function addTableDyn(){
     for (var i = 0; i < lens[count]; i++) {
         var row = document.createElement("tr");
           row.setAttribute("class", "rows")
-        for (var j = 0; j < 3; j++) {
+        for (var j = 0; j < 4; j++) {
           var cell = document.createElement("td");         
           var numeric = document.createElement('h4');
           var img_col = document.createElement('h4');
@@ -188,24 +217,31 @@ function addTableDyn(){
           switch(j){
             case 0:
               numeric.innerHTML = eval(i+1);
+              cell.appendChild(numeric);
               break;
             case 1:
               img_col.innerHTML = userlist.users[iter].img_type;
+              cell.appendChild(img_col);
               break;
-            case 2:
-              link_col.innerHTML = userlist.users[iter].img_link;
+              case 2:
+                link_col.innerHTML = userlist.users[iter].img_link;
+                cell.appendChild(link_col);
+                break;
+              case 3:
+              var img = new Image();
+              img.style.width = '5vw';
+              img.style.height = '5vw';
+              img.src = userlist.users[iter].img_link;
+              cell.appendChild(img);
               iter++;
               break;
             
             default:
-              console.log("avner");
+              console.log("Error!");
             
           }
 
           row.appendChild(cell);
-          cell.appendChild(numeric);
-          cell.appendChild(img_col);
-          cell.appendChild(link_col);
           
           cell.setAttribute("ClassName", 'cell')
           
