@@ -1,4 +1,9 @@
 // -- VARIABLES -- //
+// vars for inputs ->
+var main_container = document.getElementsByClassName('container')[0];
+var input_son = document.getElementsByClassName('son')[0];
+var form_group = document.getElementsByClassName('form-group')[0];
+var add_or_remove_container = document.getElementsByClassName('changes')[0];
 
 var parent = document.getElementsByClassName('parent')[0];
 var ta = document.createElement('textarea');
@@ -12,6 +17,7 @@ var cpy = document.createElement('button');
 var snack = document.createElement('div');
 snack.setAttribute('id', 'snackbar');
 document.body.appendChild(snack)
+
 
 
 const headers = ['Online', 'Retail', 'Omni']
@@ -28,44 +34,51 @@ class UserManager{
     this.users = [];
   }
 
- 
-  addUser(user){
+   addUser(user){
     this.users.push(user);
-    // console.log(user + ' pushed');
   }
 }
 
 var userlist = new UserManager();
 
-
+// This function takes info from inputs and revokes the table & json
+// function doesn't return anything for now.
 function getUserFromDoc(){
-  var data = document.querySelectorAll('input')
+  var inputs = document.querySelectorAll('input') 
+  var dropdown = document.getElementsByName('dDown')
   var type = ''
-  
+  var k = 0;
+
+  var input_lens = []
+  for(let i = 0,j = 0; i < 5; i+=2, j++){
+    input_lens[j] = main_container.children[i].querySelectorAll('div').length/2
+  }  
+
+  // Re-init after every attempt (click)
   if(userlist.users.length > 0)
     userlist.users = [];
-  for (let i = 0; i < data.length; i+=2) {
-    if(i < 10)
-     type = 'Online'
-    else if(i >= 10 && i < 20)
-      type = 'Retail'
-    else
-      type = 'Omni'
-    if(!data[i].value || !data[i+1].value){
-      console.log('Row ' + eval( i/2+ 1) + ' Not Added!');
-    }
-    else
-      userlist.addUser(new User(data[i].value, data[i+1].value, type));
-  }
 
-// console.log(userlist.users);
+  // create users from dropdown and input
+  for (let i = 0; i < input_lens.length; i++) {
+    type = headers[i];
+    for (let j = 0; j < input_lens[i]; j++) {
+      if(!dropdown[k].value || !inputs[k].value)
+        k++;
+      else{
+        userlist.addUser(new User(dropdown[k].value, inputs[k].value, type));
+        k++;
+      }
+    }
+  }
 
 parent.style.display = 'block'
 
-addTableDyn(userlist.users);
+addTableDyn();
 createJSONtextArea();
 }
 
+// This function Creates TextArea with JSON data in it
+// allowing to copy\beautify\minify thte JSON data
 function createJSONtextArea(){
 ta.innerHTML = ''
 
@@ -104,7 +117,6 @@ cpy.addEventListener('click', () =>{
 })
 
 ta.innerHTML = x;
-
 document.body.appendChild(ta);  
 }
 
@@ -115,27 +127,65 @@ function snackbar(msg) {
   setTimeout(function(){ snack.className = snack.className.replace("show", ""); }, 2400);
 }
 
-function createInputs(){
-  var main_container = document.getElementsByClassName('container')[0];
-  var input_son = document.getElementsByClassName('son')[0];
-  var form_group =  document.getElementsByClassName('form-group')[0];
-
-  for (let index = 0; index < 4; index++) {
+// The first step of this site - create Inputs Dynamiclly
+function createInputs(num = 5){  
+  for (let index = 0; index < num-1; index++) {
     var form_brother = form_group.cloneNode(true);
     input_son.appendChild(form_brother)
   }
  
+  // DUPLICATE SONS
   var retail_brother = input_son.cloneNode(true);
+  retail_brother.setAttribute('class', 'son retail');
   var omni_brother = input_son.cloneNode(true);
+  omni_brother.setAttribute('class', 'son omni');
 
+  // DUPLICATE BUTTONS 
+  var add_rem_retail = add_or_remove_container.cloneNode(true);
+  add_rem_retail.setAttribute('class', 'changes reatil');
+  add_rem_retail.childNodes[1].setAttribute('onclick', "addInput('.son.retail')")
+  add_rem_retail.childNodes[3].setAttribute('onclick', "removeInput('.son.retail')")
+  // console.log(add_rem_retail.childNodes[]);
+ 
+  var add_rem_omni = add_or_remove_container.cloneNode(true);
+  add_rem_omni.childNodes[1].setAttribute('onclick', "addInput('.son.omni')")
+  add_rem_omni.childNodes[3].setAttribute('onclick', "removeInput('.son.omni')")
+  add_rem_omni.setAttribute('class', 'changes omni');
+
+ 
   retail_brother.childNodes[1].innerHTML = headers[1] + ': ';
   omni_brother.childNodes[1].innerHTML = headers[2] + ': ';
 
   main_container.appendChild(retail_brother);
+  main_container.appendChild(add_rem_retail);
   main_container.appendChild(omni_brother);
+  main_container.appendChild(add_rem_omni);
 
+  makeItDraggable();
 }
 
+function addInput(class_str){
+  var son = document.querySelector(class_str)
+  var f_group = son.childNodes[3];
+  console.log(f_group);
+  
+  var form_brother = f_group.cloneNode(true);
+  form_brother.querySelector('input').value = ''
+  son.appendChild(form_brother)
+}
+function removeInput(class_str){
+  var x = document.querySelectorAll(class_str)
+  var len = x[0].childNodes.length-1;
+  console.log(len);
+  if(len >= 9 )
+   x[0].childNodes[len].remove();
+  else
+    console.log('cannot delete less than 5 nodes');
+  }
+
+
+
+// This function assists to let us know how many segments we hold in our list
 function findLengths(){
   lens = [0,0,0];
   
@@ -195,7 +245,6 @@ function addTableDyn(){
              str = 'Image Link'
              break;
         case 3:
-          console.log('iter');
              str = 'Preview'
              break;
      }
@@ -205,6 +254,7 @@ function addTableDyn(){
 
    }
    tblBody.appendChild(row);
+   
     for (var i = 0; i < lens[count]; i++) {
         var row = document.createElement("tr");
           row.setAttribute("class", "rows")
@@ -232,6 +282,7 @@ function addTableDyn(){
               img.style.width = '5vw';
               img.style.height = '5vw';
               img.src = userlist.users[iter].img_link;
+              
               cell.appendChild(img);
               iter++;
               break;
@@ -242,7 +293,6 @@ function addTableDyn(){
           }
 
           row.appendChild(cell);
-          
           cell.setAttribute("ClassName", 'cell')
           
         }
@@ -259,3 +309,50 @@ function addTableDyn(){
 
     }
   }
+
+function makeItDraggable(){
+// Drag
+const draggables = document.querySelectorAll('.draggable')
+const  containers =  document.querySelectorAll('.son')
+draggables[0].draggable = false;
+draggables[5].draggable = false;
+draggables[10].draggable = false;
+
+draggables.forEach(draggable => {
+  draggable.addEventListener('dragstart', () => {
+    draggable.classList.add('dragging')
+  })
+
+  draggable.addEventListener('dragend', () => {
+    draggable.classList.remove('dragging')
+  })
+})
+console.log(draggables);
+
+containers.forEach(container => {
+  container.addEventListener('dragover', e => {
+    e.preventDefault()
+    const afterElement = getDragAfterElement(container, e.clientY)
+    const draggable = document.querySelector('.dragging')
+    if (afterElement == null) {
+      container.appendChild(draggable)
+    } else {
+      container.insertBefore(draggable, afterElement)
+    }
+  })
+})
+}
+
+function getDragAfterElement(container, y) {
+  const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')]
+
+  return draggableElements.reduce((closest, child) => {
+    const box = child.getBoundingClientRect()
+    const offset = y - box.top - box.height / 2
+    if (offset < 0 && offset > closest.offset) {
+      return { offset: offset, element: child }
+    } else {
+      return closest
+    }
+  }, { offset: Number.NEGATIVE_INFINITY }).element
+}

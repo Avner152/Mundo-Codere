@@ -11,21 +11,33 @@
 
 
 <body onload="createInputs()">
+    
     <h1 class="mundo">Mundo Codere</h1>
     <div class="container">
-        <div class="son">
+        <div class="son online">
         <h1>Online: </h1>
-        <div class="form-group">
+        <div class="form-group draggable" draggable="true">
             <span>Image Type: </span>
-            <input class="form-field" type="text" placeholder="text something">
+            <select class="dDown" name="dDown">
+                <option value=""></option>
+                <option value="Online">Online</option>
+                <option value="Retail">Retail</option>
+                <option value="Omni">Omni</option>
+                </select>
+            
             <div class="form-group" id="online">
                 <span>Image Link: </span>
                 <input class="form-field" type="text" placeholder="text something">
             </div>
          </div>
         </div>
-
+        <div class="changes online">
+            <a id="add" onclick="addInput('.son.online')">+ add input</a>
+            <a id="remove" onclick="removeInput('.son.online')">- delete input</a>
         </div>
+        </div>
+       
+
         <a class="btn" onclick="getUserFromDoc()">Accept</a>
     <div class="parent">
         <table>

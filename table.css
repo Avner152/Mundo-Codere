@@ -81,11 +81,6 @@ th {
 
 /*  */
 
-.container {
-	/* width: 100%; */
-
-}
-
 :root {
 	--input-color: #99a3ba;
 	--input-border: #cdd9ed;
@@ -98,7 +93,37 @@ th {
 	--group-color-focus: #fff;
 	--group-border-focus: var(--input-border-focus);
 	--group-background-focus: #678efe;
+	--option-color: #99a3ba;
+	--option-border: #cdd9ed;
+	--option-background: #fff;
+	--option-placeholder: #cbd1dc;
+	--option-border-focus: #275efe;
+
 }
+
+.changes {
+	cursor: pointer;
+	margin: auto;
+	display: table;
+	color: whitesmoke;
+	font-weight: lighter;
+	letter-spacing: 2px;
+}
+
+.changes #add {
+	margin: 1px .5vw 0vw 0px;
+	padding: 0px .3vw .2vw .3vw;
+	background-color: #678efe;
+
+}
+
+.changes #remove {
+	background-color: red;
+	padding: 0vw .3vw .2vw .3vw;
+
+}
+
+
 
 .btn {
 	display: block;
@@ -108,7 +133,7 @@ th {
 	font-family: 'Poiret One', cursive;
 	width: 46%;
 	letter-spacing: 9px;
-	margin-top: -1vw;
+	margin-top: 1vw;
 	text-align: center;
 	font-size: 3em;
 	cursor: pointer;
@@ -318,4 +343,21 @@ body .form-group:not(:last-child) {
 		bottom: 0;
 		opacity: 0;
 	}
+}
+
+/* Drop Down */
+
+.dDown {
+	color: var(--input-color);
+	border: solid .5px #99a3ba;
+	border-radius: 5px;
+}
+
+/* Drags */
+.draggable {
+	cursor: move;
+}
+
+.draggable.dragging {
+	opacity: .5;
 }
