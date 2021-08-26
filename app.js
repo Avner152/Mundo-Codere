@@ -17,15 +17,25 @@ var cpy = document.createElement('button');
 var snack = document.createElement('div');
 snack.setAttribute('id', 'snackbar');
 document.body.appendChild(snack)
-
-
+var temp;
 
 const headers = ['Online', 'Retail', 'Omni']
+const CTAheaders = ['Registrate', 'Visitante', 'Sumate']
+
+// Online?? yes -> where? -> headers[0] -> 0 -> CTA[0] -> Registrate
+// Retail -> ..... ->Vistante
+
 class User{
-  constructor(img_type, img_link, user_segment = 'Online'){
-    this.user_segment = user_segment;
+  constructor(img_type, img_link){
     this.img_type = img_type;
     this.img_link = img_link;
+  }
+}
+
+class UserList{
+  constructor(segment = "Online"){
+    this.user_segment = segment;
+    this.userlist = [];
   }
 }
 
@@ -33,50 +43,175 @@ class UserManager{
   constructor(){
     this.users = [];
   }
-
-   addUser(user){
-    this.users.push(user);
-  }
 }
 
-var userlist = new UserManager();
+var online_list = new UserList()
+var retail_list = new UserList('Retail')
+var omni_list = new UserList('Omni');
+// var online_list = setOnlineList();
+// var retail_list = setRetailList();
+// var omni_list = setOmniList();
+
+var userManager = new UserManager();
+
+
+function setOnlineList(){
+  return [
+    new User('Online', 'ure'),
+    new User('Online', 'dikla'),
+    new User('Online', ''),
+    new User('Omni', 'שדג'),
+    new User('Omni', ''),
+    ]
+}
+
+function setRetailList(){
+  return [
+    new User('Retail', ''),
+    new User('Retail', ''),
+    new User('Omni', ''),
+    new User('Omni', '13'),
+    new User('Online', ''),
+    ];
+}
+
+function setOmniList(){
+  return [
+    new User('Omni', ''),
+    new User('Omni', 'dsa'),
+    new User('Omni', ''),
+    new User('Retail', ''),
+    new User('Online', 'asd'),
+    ];
+}
 
 // This function takes info from inputs and revokes the table & json
 // function doesn't return anything for now.
+
 function getUserFromDoc(){
-  var inputs = document.querySelectorAll('input') 
+  var inputs = document.querySelectorAll('input')
+  var sons = document.querySelectorAll('.son');
   var dropdown = document.getElementsByName('dDown')
-  var type = ''
+  var inputs_size;
   var k = 0;
-
-  var input_lens = []
-  for(let i = 0,j = 0; i < 5; i+=2, j++){
-    input_lens[j] = main_container.children[i].querySelectorAll('div').length/2
-  }  
-
+  
   // Re-init after every attempt (click)
-  if(userlist.users.length > 0)
-    userlist.users = [];
+  if(userManager.users.length > 0)
+      userManager.users = [];
+  online_list.userlist =[];
+  retail_list.userlist = [];
+  omni_list.userlist = [];
 
-  // create users from dropdown and input
-  for (let i = 0; i < input_lens.length; i++) {
-    type = headers[i];
-    for (let j = 0; j < input_lens[i]; j++) {
+  data_in_input = findLengths();
+  // create users from dropdown and 
+
+  for (let i = 0; i < 3; i++) {
+    inputs_size = sons[i].querySelectorAll('input').length;
+    for (let j = 0; j < inputs_size; j++) {
       if(!dropdown[k].value || !inputs[k].value)
+        {}
+      else{          
+        // console.log('k = ' + k);
+          if(i == 0){
+            online_list.userlist.push(new User(dropdown[k].value, inputs[k].value));
+            // console.log('in: 0');
+          }
+          else if(i == 1)
+          {  
+          retail_list.userlist.push(new User(dropdown[k].value, inputs[k].value));
+          // console.log('in 1');
+        }
+          else{
+            omni_list.userlist.push(new User(dropdown[k].value, inputs[k].value));
+            console.log('done');
+            // console.log('in 2');
+          }
+        }
         k++;
-      else{
-        userlist.addUser(new User(dropdown[k].value, inputs[k].value, type));
-        k++;
-      }
     }
+
   }
 
-parent.style.display = 'block'
+  
+  parent.style.display = 'block'
 
+userManager.users = [online_list, retail_list, omni_list]
 addTableDyn();
 createJSONtextArea();
 }
 
+function setAllInputs(action = true){
+  setOnlineInput(action);
+  setRetailInput(action);
+  setOmniInput(action);
+}
+
+function setOnlineInput(action = true){ // true is Add | false is clear //
+   temp = setOnlineList();
+  var forms = document.querySelectorAll('.son')[0].querySelectorAll('.form-group');
+  // console.log(forms);
+  if(action){
+  for(let i = 0, j = 0; i < forms.length; i+=2, j++){
+    forms[i].children[1].querySelectorAll('option')[0].innerHTML = 
+    forms[i].children[1].querySelectorAll('option')[0].value = 
+    temp[j].img_type;
+    forms[i].querySelector('input').value = temp[j].img_link
+    }
+  }
+  else{
+    for(let i = 0; i < forms.length; i+=2){
+      forms[i].children[1].querySelectorAll('option')[0].innerHTML = 
+      forms[i].children[1].querySelectorAll('option')[0].value = 
+      '';
+      forms[i].querySelector('input').value = ''
+      }
+  }
+}
+function setRetailInput(action = true){
+  temp = setRetailList();
+  var forms = document.querySelectorAll('.son')[1].querySelectorAll('.form-group');
+  if(action){
+  for(let i = 0, j = 0; i < forms.length; i+=2, j++){
+    forms[i].children[1].querySelectorAll('option')[0].innerHTML = 
+    forms[i].children[1].querySelectorAll('option')[0].value = 
+    temp[j].img_type;
+    forms[i].querySelector('input').value = temp[j].img_link
+
+    }
+  }
+  else{
+    for(let i = 0; i < forms.length; i+=2){
+      forms[i].children[1].querySelectorAll('option')[0].innerHTML = 
+      forms[i].children[1].querySelectorAll('option')[0].value = 
+      '';
+      forms[i].querySelector('input').value = ''
+
+      }
+  }
+}
+
+function setOmniInput(action = true){
+  temp = setOmniList();
+  var forms = document.querySelectorAll('.son')[2].querySelectorAll('.form-group');
+
+  if(action){
+  for(let i = 0, j = 0; i < forms.length; i+=2, j++){
+    forms[i].children[1].querySelectorAll('option')[0].innerHTML = 
+    forms[i].children[1].querySelectorAll('option')[0].value = 
+    temp[j].img_type;
+    forms[i].querySelector('input').value = temp[j].img_link
+     }
+  }
+  else{
+    for(let i = 0; i < forms.length; i+=2){
+      forms[i].children[1].querySelectorAll('option')[0].innerHTML = 
+      forms[i].children[1].querySelectorAll('option')[0].value = 
+      '';
+      forms[i].querySelector('input').value = ''
+      }
+  }
+}
+  
 // This function Creates TextArea with JSON data in it
 // allowing to copy\beautify\minify thte JSON data
 function createJSONtextArea(){
@@ -94,17 +229,17 @@ json_btn_container.appendChild(minify);
 json_btn_container.appendChild(cpy);
 var x = '';
 
-x = JSON.stringify(userlist);
+x = JSON.stringify(userManager);
 
 beautify.addEventListener('click', () =>{
-  x = JSON.stringify(userlist, null, 3)
+  x = JSON.stringify(userManager, null, 3)
   ta.innerHTML = x;
   snackbar('Beautified!');
 
 })
   
 minify.addEventListener('click', () =>{
-  x = JSON.stringify(userlist)
+  x = JSON.stringify(userManager)
   ta.innerHTML = x;
   snackbar('Minified!');
 
@@ -166,17 +301,18 @@ function createInputs(num = 5){
 
 function addInput(class_str){
   var son = document.querySelector(class_str)
-  var f_group = son.childNodes[3];
-  console.log(f_group);
-  
+  var f_group = son.childNodes[3];  
   var form_brother = f_group.cloneNode(true);
-  form_brother.querySelector('input').value = ''
+
+  form_brother.querySelector('input').value =
+   form_brother.querySelector('option').value =
+   form_brother.querySelector('option').innerHTML = 
+   ''
   son.appendChild(form_brother)
 }
 function removeInput(class_str){
   var x = document.querySelectorAll(class_str)
   var len = x[0].childNodes.length-1;
-  console.log(len);
   if(len >= 9 )
    x[0].childNodes[len].remove();
   else
@@ -187,18 +323,19 @@ function removeInput(class_str){
 
 // This function assists to let us know how many segments we hold in our list
 function findLengths(){
-  lens = [0,0,0];
-  
-  userlist.users.forEach(user => {
-    if(!user.user_segment.localeCompare('Online'))
-      lens[0]++;
-    else if(!user.user_segment.localeCompare('Retail'))
-      lens[1]++;
-    else if(!user.user_segment.localeCompare('Omni'))
-      lens[2]++;
-    else
-      console.log('No match!');
-  });
+  var lens = [0,0,0]
+  var sons = document.getElementsByClassName('son');
+  var groups = 0;
+  for(let x = 0; x < sons.length; x++){
+    groups = sons[x].querySelectorAll('.form-group');
+    for(let y = 0; y < groups.length/2; y++){
+      if(!groups[y*2].querySelector('.dDown').value || !groups[y*2].querySelector('input').value)
+        {}
+      else{
+        lens[x]++;
+      }
+    }
+  }
   return lens;
 }
 
@@ -211,9 +348,10 @@ function addTableDyn(){
   lens = findLengths();
 
   while (count < 3){
-  
+    iter = 0;
+
   if(lens[count] == 0){
-    console.log('empty');
+    // console.log('empty');
   }
   else{
   var div_element = document.createElement('div');  
@@ -254,42 +392,39 @@ function addTableDyn(){
 
    }
    tblBody.appendChild(row);
-   
     for (var i = 0; i < lens[count]; i++) {
-        var row = document.createElement("tr");
-          row.setAttribute("class", "rows")
+      var row = document.createElement("tr");
+          row.setAttribute("class", "rows")  
         for (var j = 0; j < 4; j++) {
           var cell = document.createElement("td");         
           var numeric = document.createElement('h4');
           var img_col = document.createElement('h4');
           var link_col = document.createElement('h4');
-          
+
           switch(j){
             case 0:
               numeric.innerHTML = eval(i+1);
               cell.appendChild(numeric);
               break;
             case 1:
-              img_col.innerHTML = userlist.users[iter].img_type;
+              img_col.innerHTML = userManager.users[count].userlist[iter].img_type;
               cell.appendChild(img_col);
               break;
               case 2:
-                link_col.innerHTML = userlist.users[iter].img_link;
+                link_col.innerHTML = userManager.users[count].userlist[iter].img_link;
                 cell.appendChild(link_col);
                 break;
               case 3:
               var img = new Image();
               img.style.width = '5vw';
               img.style.height = '5vw';
-              img.src = userlist.users[iter].img_link;
-              
+              img.src = userManager.users[count].userlist[iter].img_link;
               cell.appendChild(img);
               iter++;
               break;
-            
+              
             default:
               console.log("Error!");
-            
           }
 
           row.appendChild(cell);
@@ -327,7 +462,7 @@ draggables.forEach(draggable => {
     draggable.classList.remove('dragging')
   })
 })
-console.log(draggables);
+// console.log(draggables);
 
 containers.forEach(container => {
   container.addEventListener('dragover', e => {

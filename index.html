@@ -5,14 +5,28 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="robots" rel="noindex, nofollow"/>
+    <title>Mundo Codere</title>
     <link rel="stylesheet" href="table.css">
 </head>
 
 
 <body onload="createInputs()">
-    
     <h1 class="mundo">Mundo Codere</h1>
+    <div class="btn_container">
+    <div class="set_btns">
+        <button onclick="setAllInputs()">Set All</button>
+        <button onclick="setOnlineInput()">Set Online</button>
+        <button onclick="setRetailInput()">Set Retail</button>
+        <button onclick="setOmniInput()">Set Omni</button>
+    </div>
+    <div class="clear_btns">
+        <button onclick="setAllInputs(false)">Clear All</button>
+        <button onclick="setOnlineInput(false)">Clear Online</button>
+        <button onclick="setRetailInput(false)">Clear Retail</button>
+        <button onclick="setOmniInput(false)">Clear Omni</button>
+    </div>
+</div>
     <div class="container">
         <div class="son online">
         <h1>Online: </h1>

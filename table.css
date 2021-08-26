@@ -10,12 +10,16 @@ h1 {
 	color: #79c000;
 	border: solid 3px #79c000;
 	margin: 1.5px, 1.5px, 1.5px, 1.5vw;
-	;
 }
 
 button {
 	text-align: center;
 }
+
+.btn_container {
+	margin: auto;
+}
+
 
 .json_btn_container {
 	overflow: auto;
