@@ -19,11 +19,10 @@ snack.setAttribute('id', 'snackbar');
 document.body.appendChild(snack)
 var temp;
 
-const headers = ['Online', 'Retail', 'Omni']
+const headers = ['Online', 'Omni']
 const CTAheaders = ['Registrate', 'Visitante', 'Sumate']
 
 // Online?? yes -> where? -> headers[0] -> 0 -> CTA[0] -> Registrate
-// Retail -> ..... ->Vistante
 
 class User{
   constructor(img_type, img_link){
@@ -46,12 +45,7 @@ class UserManager{
 }
 
 var online_list = new UserList()
-var retail_list = new UserList('Retail')
 var omni_list = new UserList('Omni');
-// var online_list = setOnlineList();
-// var retail_list = setRetailList();
-// var omni_list = setOmniList();
-
 var userManager = new UserManager();
 
 
@@ -65,7 +59,7 @@ function setOnlineList(){
     ]
 }
 
-function setRetailList(){
+function setOmniList(){
   return [
     new User('Retail', ''),
     new User('Retail', ''),
@@ -75,21 +69,11 @@ function setRetailList(){
     ];
 }
 
-function setOmniList(){
-  return [
-    new User('Omni', ''),
-    new User('Omni', 'dsa'),
-    new User('Omni', ''),
-    new User('Retail', ''),
-    new User('Online', 'asd'),
-    ];
-}
-
 // This function takes info from inputs and revokes the table & json
 // function doesn't return anything for now.
 
 function getUserFromDoc(){
-  var inputs = document.querySelectorAll('input')
+  var inputs = document.querySelectorAll('.img-link')
   var sons = document.querySelectorAll('.son');
   var dropdown = document.getElementsByName('dDown')
   var inputs_size;
@@ -98,15 +82,15 @@ function getUserFromDoc(){
   // Re-init after every attempt (click)
   if(userManager.users.length > 0)
       userManager.users = [];
+
   online_list.userlist =[];
-  retail_list.userlist = [];
   omni_list.userlist = [];
 
   data_in_input = findLengths();
-  // create users from dropdown and 
 
-  for (let i = 0; i < 3; i++) {
-    inputs_size = sons[i].querySelectorAll('input').length;
+  // create users from dropdown and 
+  for (let i = 0; i < 2; i++) {
+    inputs_size = sons[i].querySelectorAll('input').length/3;
     for (let j = 0; j < inputs_size; j++) {
       if(!dropdown[k].value || !inputs[k].value)
         {}
@@ -116,16 +100,12 @@ function getUserFromDoc(){
             online_list.userlist.push(new User(dropdown[k].value, inputs[k].value));
             // console.log('in: 0');
           }
-          else if(i == 1)
+          else
           {  
-          retail_list.userlist.push(new User(dropdown[k].value, inputs[k].value));
+            omni_list.userlist.push(new User(dropdown[k].value, inputs[k].value));
           // console.log('in 1');
         }
-          else{
-            omni_list.userlist.push(new User(dropdown[k].value, inputs[k].value));
-            console.log('done');
-            // console.log('in 2');
-          }
+      
         }
         k++;
     }
@@ -135,14 +115,13 @@ function getUserFromDoc(){
   
   parent.style.display = 'block'
 
-userManager.users = [online_list, retail_list, omni_list]
+userManager.users = [online_list, omni_list]
 addTableDyn();
 createJSONtextArea();
 }
 
 function setAllInputs(action = true){
   setOnlineInput(action);
-  setRetailInput(action);
   setOmniInput(action);
 }
 
@@ -167,8 +146,8 @@ function setOnlineInput(action = true){ // true is Add | false is clear //
       }
   }
 }
-function setRetailInput(action = true){
-  temp = setRetailList();
+function setOmniInput(action = true){
+  temp = setOmniList();
   var forms = document.querySelectorAll('.son')[1].querySelectorAll('.form-group');
   if(action){
   for(let i = 0, j = 0; i < forms.length; i+=2, j++){
@@ -190,27 +169,6 @@ function setRetailInput(action = true){
   }
 }
 
-function setOmniInput(action = true){
-  temp = setOmniList();
-  var forms = document.querySelectorAll('.son')[2].querySelectorAll('.form-group');
-
-  if(action){
-  for(let i = 0, j = 0; i < forms.length; i+=2, j++){
-    forms[i].children[1].querySelectorAll('option')[0].innerHTML = 
-    forms[i].children[1].querySelectorAll('option')[0].value = 
-    temp[j].img_type;
-    forms[i].querySelector('input').value = temp[j].img_link
-     }
-  }
-  else{
-    for(let i = 0; i < forms.length; i+=2){
-      forms[i].children[1].querySelectorAll('option')[0].innerHTML = 
-      forms[i].children[1].querySelectorAll('option')[0].value = 
-      '';
-      forms[i].querySelector('input').value = ''
-      }
-  }
-}
   
 // This function Creates TextArea with JSON data in it
 // allowing to copy\beautify\minify thte JSON data
@@ -270,29 +228,19 @@ function createInputs(num = 5){
   }
  
   // DUPLICATE SONS
-  var retail_brother = input_son.cloneNode(true);
-  retail_brother.setAttribute('class', 'son retail');
   var omni_brother = input_son.cloneNode(true);
   omni_brother.setAttribute('class', 'son omni');
 
   // DUPLICATE BUTTONS 
-  var add_rem_retail = add_or_remove_container.cloneNode(true);
-  add_rem_retail.setAttribute('class', 'changes reatil');
-  add_rem_retail.childNodes[1].setAttribute('onclick', "addInput('.son.retail')")
-  add_rem_retail.childNodes[3].setAttribute('onclick', "removeInput('.son.retail')")
-  // console.log(add_rem_retail.childNodes[]);
- 
+
   var add_rem_omni = add_or_remove_container.cloneNode(true);
   add_rem_omni.childNodes[1].setAttribute('onclick', "addInput('.son.omni')")
   add_rem_omni.childNodes[3].setAttribute('onclick', "removeInput('.son.omni')")
   add_rem_omni.setAttribute('class', 'changes omni');
 
  
-  retail_brother.childNodes[1].innerHTML = headers[1] + ': ';
-  omni_brother.childNodes[1].innerHTML = headers[2] + ': ';
+  omni_brother.childNodes[1].innerHTML = headers[1] + ': ';
 
-  main_container.appendChild(retail_brother);
-  main_container.appendChild(add_rem_retail);
   main_container.appendChild(omni_brother);
   main_container.appendChild(add_rem_omni);
 
@@ -347,7 +295,7 @@ function addTableDyn(){
 
   lens = findLengths();
 
-  while (count < 3){
+  while (count < 2){
     iter = 0;
 
   if(lens[count] == 0){
@@ -451,7 +399,7 @@ const draggables = document.querySelectorAll('.draggable')
 const  containers =  document.querySelectorAll('.son')
 draggables[0].draggable = false;
 draggables[5].draggable = false;
-draggables[10].draggable = false;
+// draggables[10].draggable = false;
 
 draggables.forEach(draggable => {
   draggable.addEventListener('dragstart', () => {
@@ -490,4 +438,14 @@ function getDragAfterElement(container, y) {
       return closest
     }
   }, { offset: Number.NEGATIVE_INFINITY }).element
+}
+
+
+function avner(target){
+  console.log('clicked');
+  console.log(target);
+    target.flatpickr('input[type=datetime-local', {
+      enableTime: true,
+      dateFormat: "d/m/Y H:i",    
+});
 }

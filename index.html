@@ -8,28 +8,35 @@
     <meta name="robots" rel="noindex, nofollow"/>
     <title>Mundo Codere</title>
     <link rel="stylesheet" href="table.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- <link rel="stylesheet" href="jquery-ui.min.css"> -->
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+
 </head>
 
 
 <body onload="createInputs()">
+    
     <h1 class="mundo">Mundo Codere</h1>
     <div class="btn_container">
     <div class="set_btns">
         <button onclick="setAllInputs()">Set All</button>
         <button onclick="setOnlineInput()">Set Online</button>
-        <button onclick="setRetailInput()">Set Retail</button>
         <button onclick="setOmniInput()">Set Omni</button>
     </div>
     <div class="clear_btns">
         <button onclick="setAllInputs(false)">Clear All</button>
         <button onclick="setOnlineInput(false)">Clear Online</button>
-        <button onclick="setRetailInput(false)">Clear Retail</button>
         <button onclick="setOmniInput(false)">Clear Omni</button>
     </div>
 </div>
+<input onclick="avner(this)" type="text">
+
     <div class="container">
         <div class="son online">
-        <h1>Online: </h1>
+        <h1>New: </h1>
         <div class="form-group draggable" draggable="true">
             <span>Image Type: </span>
             <select class="dDown" name="dDown">
@@ -39,10 +46,17 @@
                 <option value="Omni">Omni</option>
                 </select>
             
-            <div class="form-group" id="online">
-                <span>Image Link: </span>
-                <input class="form-field" type="text" placeholder="text something">
-            </div>
+                <div class="form-group" id="online">
+                    <span>Image Link: </span>
+                    <input class="form-field img-link" type="text" placeholder="text something">
+                    <span>CTA Text: </span>
+                    <input class="form-field cta" type="text" value="Regístrate">
+                    <span>Start Date: </span>
+                    <input class="form-field active" type="text" placeholder="dd/mm/yyy">
+                    <span>End Date: </span>
+                    <input class="form-field active" onclick="avner(this)" type="text" placeholder="dd/mm/yyy">
+                </div>
+               
          </div>
         </div>
         <div class="changes online">
@@ -51,7 +65,6 @@
         </div>
         </div>
        
-
         <a class="btn" onclick="getUserFromDoc()">Accept</a>
     <div class="parent">
         <table>
@@ -60,7 +73,10 @@
         </table>
     </div>
     <script src="app.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
+    <!-- <script type="text/javascript" src="jquery-ui.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 </body>
 

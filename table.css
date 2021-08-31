@@ -40,8 +40,8 @@ td {
 }
 
 .son {
-	width: 70vw;
-	margin-left: 24.5vw;
+	/* width: 70vw;
+	margin-left: 24.5vw; */
 }
 
 table {
@@ -252,7 +252,7 @@ body {
 }
 
 body .form-group {
-	max-width: 65%;
+	max-width: 100%;
 }
 
 body .form-group:not(:last-child) {
