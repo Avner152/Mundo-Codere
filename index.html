@@ -9,16 +9,14 @@
     <title>Mundo Codere</title>
     <link rel="stylesheet" href="table.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <!-- <link rel="stylesheet" href="jquery-ui.min.css"> -->
     
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script> -->
 
 
 </head>
 
 
 <body onload="createInputs()">
-    
     <h1 class="mundo">Mundo Codere</h1>
     <div class="btn_container">
     <div class="set_btns">
@@ -32,7 +30,6 @@
         <button onclick="setOmniInput(false)">Clear Omni</button>
     </div>
 </div>
-<input onclick="avner(this)" type="text">
 
     <div class="container">
         <div class="son online">
@@ -52,9 +49,9 @@
                     <span>CTA Text: </span>
                     <input class="form-field cta" type="text" value="Regístrate">
                     <span>Start Date: </span>
-                    <input class="form-field active" type="text" placeholder="dd/mm/yyy">
+                    <input class="form-field start" onclick="avner(this)" type="text" placeholder="dd/mm/yyy">
                     <span>End Date: </span>
-                    <input class="form-field active" onclick="avner(this)" type="text" placeholder="dd/mm/yyy">
+                    <input class="form-field end" onclick="avner(this)" type="text" placeholder="dd/mm/yyy">
                 </div>
                
          </div>
@@ -74,8 +71,6 @@
     </div>
     <script src="app.js"></script>
 
-    <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
-    <!-- <script type="text/javascript" src="jquery-ui.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 </body>

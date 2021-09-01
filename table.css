@@ -20,6 +20,10 @@ button {
 	margin: auto;
 }
 
+.start,
+.end {
+	cursor: help;
+}
 
 .json_btn_container {
 	overflow: auto;
@@ -39,9 +43,8 @@ td {
 	text-align: center !important;
 }
 
-.son {
-	/* width: 70vw;
-	margin-left: 24.5vw; */
+.container {
+	width: 85%;
 }
 
 table {
@@ -164,10 +167,10 @@ th {
 	color: var(--input-placeholder);
 }
 
-.form-field:focus {
+/* .form-field:focus {
 	outline: none;
 	border-color: var(--input-border-focus);
-}
+} */
 
 .form-group {
 	position: relative;
@@ -203,9 +206,10 @@ th {
 
 .form-group .form-field {
 	position: relative;
-	z-index: 1;
+	text-align: center;
+	/* z-index: 1; */
 	flex: 1 1 auto;
-	width: 1%;
+	/* width: 1%; */
 	margin-top: 0;
 	margin-bottom: 0;
 }
@@ -221,7 +225,7 @@ th {
 	transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
 }
 
-.form-group:focus-within>span {
+.form-group:focus-within span {
 	color: var(--group-color-focus);
 	background: var(--group-background-focus);
 	border-color: var(--group-border-focus);
@@ -259,6 +263,9 @@ body .form-group:not(:last-child) {
 	margin-bottom: .5vw;
 }
 
+.form-group>.cta {
+	width: 8vw;
+}
 
 /*  */
 
