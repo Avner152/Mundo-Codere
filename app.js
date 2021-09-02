@@ -4,17 +4,21 @@ var main_container = document.getElementsByClassName('container')[0];
 var input_son = document.getElementsByClassName('son')[0];
 var form_group = document.getElementsByClassName('form-group')[0];
 var add_or_remove_container = document.getElementsByClassName('changes')[0];
-var starte
 
 var parent = document.getElementsByClassName('parent')[0];
+
+//  Text Area & JSON
 var ta = document.createElement('textarea');
 ta.setAttribute('readonly', true);
 var jsonHeader = document.createElement('h1');
 jsonHeader.innerHTML = 'JSON:'
 var json_btn_container = document.createElement('div');
+// buttons for json file
 var beautify = document.createElement('button');
 var minify = document.createElement('button');
 var cpy = document.createElement('button');
+var download = document.createElement('button');
+
 var snack = document.createElement('div');
 snack.setAttribute('id', 'snackbar');
 document.body.appendChild(snack)
@@ -26,17 +30,18 @@ const CTAheaders = ['Registrate', 'Visitante', 'Sumate']
 // Online?? yes -> where? -> headers[0] -> 0 -> CTA[0] -> Registrate
 
 class User {
-	constructor(img_type, img_link, cta_text, start_date, end_date) {
+	constructor(img_type, img_link, cta_text, cta_link, start_date, end_date) {
 		this.img_type = img_type;
 		this.img_link = img_link;
     this.cta_text = cta_text
+    this.cta_link = cta_link;
 		this.start_date = start_date;
 		this.end_date = end_date;
 	}
 }
 
 class UserList {
-	constructor(segment = "Online") {
+	constructor(segment = "Unknown") {
 		this.user_segment = segment;
 		this.userlist = [];
 	}
@@ -52,13 +57,12 @@ var online_list = new UserList()
 var omni_list = new UserList('Omni');
 var userManager = new UserManager();
 
-
 function setOnlineList() {
 	return [
 		new User('Online', 'ure'),
-		new User('Online', 'https://www.codere.es/_catalogs/masterpage/codere/images/splash/laliga_desktop.jpg'),
 		new User('Online', ''),
-		new User('Omni', 'שדג'),
+		new User('Online', ''),
+		new User('Omni', 'https://www.codere.es/OmniSplash/assets/Mobile_retail.jpg'),
 		new User('Omni', ''),
 	]
 }
@@ -68,7 +72,7 @@ function setOmniList() {
 		new User('Retail', ''),
 		new User('Retail', ''),
 		new User('Omni', ''),
-		new User('Omni', '13'),
+		new User('Omni', 'https://www.codere.es/OmniSplash/images/online%20rulleta%20mobile.jpg'),
 		new User('Online', ''),
 	];
 }
@@ -83,7 +87,7 @@ function getUserFromDoc() {
 
 	var form_group, inputs_size, dates;
 	var k = 0;
-	var startDate, endDate, cta_text;
+	var startDate, endDate, cta_text, cta_link;
 	var show = 1;
 	// Re-init after every attempt (click)
 	if (userManager.users.length > 0)
@@ -103,7 +107,8 @@ function getUserFromDoc() {
       dateElement = form_group.getElementsByClassName('form-control');
 
       cta_text = form_group.querySelector('.cta').value;
-
+      cta_link = form_group.querySelector('.cta_link').value;
+      
       startDate = endDate = 'None';
 
       if(dates.length == 1){
@@ -133,9 +138,9 @@ function getUserFromDoc() {
 			}
 			if (!dropdown[k].value || !inputs[k].value) {} else {
 				if (i == 0) {
-					online_list.userlist.push(new User(dropdown[k].value, inputs[k].value, cta_text, startDate, endDate));
+					online_list.userlist.push(new User(dropdown[k].value, inputs[k].value, cta_text,cta_link, startDate, endDate));
 				} else {
-					omni_list.userlist.push(new User(dropdown[k].value, inputs[k].value, cta_text, startDate, endDate));
+					omni_list.userlist.push(new User(dropdown[k].value, inputs[k].value, cta_text,cta_link, startDate, endDate));
 				}
 			}
 			k++;
@@ -239,7 +244,7 @@ function setOmniInput(action = true) {
 // This function Creates TextArea with JSON data in it
 // allowing to copy\beautify\minify thte JSON data
 function createJSONtextArea() {
-	ta.innerHTML = ''
+  ta.innerHTML = ''
 
 	document.body.appendChild(jsonHeader);
 	json_btn_container.setAttribute('class', 'json_btn_container')
@@ -247,10 +252,12 @@ function createJSONtextArea() {
 	beautify.innerHTML = 'Beautify';
 	minify.innerHTML = 'Minify';
 	cpy.innerHTML = 'Copy Contect';
+  download.innerHTML = 'Download json file'
 
 	json_btn_container.appendChild(beautify);
 	json_btn_container.appendChild(minify);
 	json_btn_container.appendChild(cpy);
+	json_btn_container.appendChild(download);
 	var x = '';
 
 	x = JSON.stringify(userManager);
@@ -274,6 +281,15 @@ function createJSONtextArea() {
 		document.execCommand('copy');
 		snackbar('Copied!');
 	})
+
+  download.addEventListener('click', () =>{
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(userManager, null, 3));
+
+    var dlAnchorElem = document.getElementById('downloadAnchorElem');
+    dlAnchorElem.setAttribute("href", dataStr);
+    dlAnchorElem.setAttribute("download", "mundosplash.json");
+    dlAnchorElem.click();
+  })
 
 	ta.innerHTML = x;
 	document.body.appendChild(ta);
@@ -438,8 +454,8 @@ function addTableDyn() {
 							break;
 						case 3:
 							var img = new Image();
-							img.style.width = '5vw';
-							img.style.height = '5vw';
+							img.style.width = '15vw';
+							img.style.height = '20vw';
 							img.src = userManager.users[count].userlist[iter].img_link;
 							cell.appendChild(img);
 							iter++;
@@ -518,8 +534,6 @@ function getDragAfterElement(container, y) {
 		offset: Number.NEGATIVE_INFINITY
 	}).element
 }
-
-
 
 function avner(target) {
 	target.flatpickr({

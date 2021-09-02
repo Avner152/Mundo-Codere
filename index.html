@@ -33,7 +33,7 @@
 
     <div class="container">
         <div class="son online">
-        <h1>New: </h1>
+        <h1>Unknown: </h1>
         <div class="form-group draggable" draggable="true">
             <span>Image Type: </span>
             <select class="dDown" name="dDown">
@@ -48,10 +48,12 @@
                     <input class="form-field img-link" type="text" placeholder="text something">
                     <span>CTA Text: </span>
                     <input class="form-field cta" type="text" value="Regístrate">
+                    <span>CTA Link: </span>
+                    <input class="form-field cta_link" type="text" value="https://m.apuestas.codere.es/csbgonline/registrolite2a/reg.html">
                     <span>Start Date: </span>
-                    <input class="form-field start" onclick="avner(this)" type="text" placeholder="dd/mm/yyy">
+                    <input class="form-field start" onclick="avner(this)" type="text" placeholder="dd/mm/yyyy">
                     <span>End Date: </span>
-                    <input class="form-field end" onclick="avner(this)" type="text" placeholder="dd/mm/yyy">
+                    <input class="form-field end" onclick="avner(this)" type="text" placeholder="dd/mm/yyyy">
                 </div>
                
          </div>
@@ -69,6 +71,7 @@
             </tbody>
         </table>
     </div>
+    <a id="downloadAnchorElem" style="display:none"></a>
     <script src="app.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
